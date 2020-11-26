@@ -3207,13 +3207,16 @@ quat4.str = function (a) { return "[" + a[0] + ", " + a[1] + ", " + a[2] + ", " 
 	Runtime.prototype.requestProjectData = function () {
 		// Fetch the name
 		var receiverName = "You"
-		if (document.URL.indexOf("?") >= 0)
+		if (document.URL.indexOf("?") >= 0) {
 			receiverName = document.URL.substr(document.URL.indexOf("?") + 4).replaceAll("+", " ")
+		}
+		console.log(receiverName)
 		var self = this;
 		if (this.isWKWebView) {
 			var loadDataJsFn = function () {
 				self.fetchLocalFileViaCordovaAsText("data.js", function (str) {
 					str = str.replaceAll("\nMay this Christmas bring", "\nTo " + receiverName + "\nMay this Christmas bring")
+					console.log(str)
 					self.loadProject(JSON.parse(str));
 				}, function (err) {
 					alert("Error fetching data.js");
@@ -3273,6 +3276,7 @@ quat4.str = function (a) { return "[" + a[0] + ", " + a[1] + ", " + a[2] + ", " 
 				if (xhr.readyState !== 4)
 					return;
 				var str = xhr["responseText"].replaceAll("\nMay this Christmas bring", "\nTo " + receiverName + "\nMay this Christmas bring")
+				console.log(str)
 				self.loadProject(JSON.parse(str));
 			};
 		}
@@ -3281,17 +3285,20 @@ quat4.str = function (a) { return "[" + a[0] + ", " + a[1] + ", " + a[2] + ", " 
 				if (supportsJsonResponse) {
 					var str = JSON.stringify(xhr["response"])
 					str = str.replaceAll("\nMay this Christmas bring", "\nTo " + receiverName + "\nMay this Christmas bring")
-					self.loadProject(str);					// already parsed by browser
+					console.log(str)
+					self.loadProject(JSON.parse(str));					// already parsed by browser
 				}
 				else {
 					if (self.isEjecta) {
 						var str = xhr["responseText"];
 						str = str.substr(str.indexOf("{"));		// trim any BOM
 						str = str.replaceAll("\nMay this Christmas bring", "\nTo " + receiverName + "\nMay this Christmas bring")
+						console.log(str)
 						self.loadProject(JSON.parse(str));
 					}
 					else {
 						var str = xhr["responseText"].replaceAll("\nMay this Christmas bring", "\nTo " + receiverName + "\nMay this Christmas bring")
+						console.log(str)
 						self.loadProject(JSON.parse(str));	// forced to sync parse JSON
 					}
 				}
