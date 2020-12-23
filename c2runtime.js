@@ -3208,8 +3208,14 @@ quat4.str = function (a) { return "[" + a[0] + ", " + a[1] + ", " + a[2] + ", " 
 		// Fetch the name
 		var receiverName = "You"
 		if (document.URL.indexOf("?") >= 0) {
-			receiverName = document.URL.substr(document.URL.indexOf("?") + 4).replaceAll("+", " ")
-		}
+			var startIndex = document.URL.indexOf("?") + 4
+			var endIndex = document.URL.indexOf("&")
+			if(endIndex >= 0)
+			  var length = endIndex - startIndex
+			else
+			  var length = document.URL.length - startIndex
+				  receiverName = document.URL.substr(startIndex, length).replaceAll("+", " ").replaceAll("%20", " ")
+			  }
 		console.log(receiverName)
 		var self = this;
 		if (this.isWKWebView) {
