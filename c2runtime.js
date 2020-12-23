@@ -3271,12 +3271,18 @@ quat4.str = function (a) { return "[" + a[0] + ", " + a[1] + ", " + a[2] + ", " 
 			}
 			catch (e) { }
 		}
+
+		var modifyDataContent = function(inputText, receiverName){
+			var str = inputText.replaceAll("\\nMay this Christmas bring", "\\nTo " + receiverName + "\\nMay this Christmas bring").replace("https://keicards.com/portfolio/cards/christmas-card-magic-lights/preview/", document.URL).replace("https://keicards.com/portfolio/cards/christmas-card-magic-lights/preview/version-white/", document.URL).replace("https://keicards.com/portfolio/cards/christmas-card-magic-lights/preview/version-red/", document.URL)
+			console.log(str)
+			return str
+		}
+
 		if (this.isWindowsPhone8) {
 			xhr.onreadystatechange = function () {
 				if (xhr.readyState !== 4)
 					return;
-				var str = xhr["responseText"].replaceAll("\\nMay this Christmas bring", "\\nTo " + receiverName + "\\nMay this Christmas bring")
-				console.log(str)
+				var str = modifyDataContent(xhr["responseText"], receiverName)
 				self.loadProject(JSON.parse(str));
 			};
 		}
@@ -3284,21 +3290,18 @@ quat4.str = function (a) { return "[" + a[0] + ", " + a[1] + ", " + a[2] + ", " 
 			xhr.onload = function () {
 				if (supportsJsonResponse) {
 					var str = JSON.stringify(xhr["response"])
-					str = str.replaceAll("\\nMay this Christmas bring", "\\nTo " + receiverName + "\\nMay this Christmas bring")
-					console.log(str)
+					str =modifyDataContent(str, receiverName)
 					self.loadProject(JSON.parse(str));					// already parsed by browser
 				}
 				else {
 					if (self.isEjecta) {
 						var str = xhr["responseText"];
 						str = str.substr(str.indexOf("{"));		// trim any BOM
-						str = str.replaceAll("\\nMay this Christmas bring", "\\nTo " + receiverName + "\\nMay this Christmas bring")
-						console.log(str)
+						str = modifyDataContent(str, receiverName)
 						self.loadProject(JSON.parse(str));
 					}
 					else {
-						var str = xhr["responseText"].replaceAll("\\nMay this Christmas bring", "\\nTo " + receiverName + "\\nMay this Christmas bring")
-						console.log(str)
+						var str = modifyDataContent(xhr["responseText"], receiverName)
 						self.loadProject(JSON.parse(str));	// forced to sync parse JSON
 					}
 				}
